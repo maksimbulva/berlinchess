@@ -28,4 +28,7 @@ class ChessboardView @JvmOverloads constructor(
         val minSize = Math.min(measuredWidth, measuredHeight)
         setMeasuredDimension(minSize, minSize)
     }
+
+    fun setItems(item: Collection<ChessboardItem>) {
+    }
 }

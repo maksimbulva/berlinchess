@@ -1,19 +1,24 @@
 package ru.maksimbulva.berlinchess
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.view.GravityCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
+import android.view.Menu
 import android.view.MenuItem
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import android.view.Menu
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import io.reactivex.disposables.Disposable
+import ru.maksimbulva.berlinchess.service.engine.ChessEngine
+import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardItem
+import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    var positionsDisposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         navView.setNavigationItemSelectedListener(this)
+
+        val chessboard: ChessboardView = findViewById(R.id.chessboard)
+
+        val chessEngine = ChessEngine()
+        positionsDisposable = chessEngine.boardObservable
+            .subscribe { board ->
+                chessboard.setItems(
+                    board.pieces.map { ChessboardItem(it.player, it.pieceType, it.square) }
+                )
+            }
     }
 
     override fun onBackPressed() {
