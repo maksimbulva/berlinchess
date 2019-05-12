@@ -13,13 +13,14 @@ class ChessboardView @JvmOverloads constructor(
 ) : FrameLayout(context, attributeSet) {
 
     private val grid: GridView
+    private val adapter = ChessboardAdapter(context)
 
     init {
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.chessboard, this, true)
 
         grid = findViewById(R.id.grid)
-        grid.adapter = ChessboardAdapter(context)
+        grid.adapter = adapter
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -29,6 +30,8 @@ class ChessboardView @JvmOverloads constructor(
         setMeasuredDimension(minSize, minSize)
     }
 
-    fun setItems(item: Collection<ChessboardItem>) {
+    fun setItems(items: Collection<ChessboardPieceItem>) {
+        adapter.setItems(items)
+        grid.invalidateViews()
     }
 }

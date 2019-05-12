@@ -13,7 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.Disposable
 import ru.maksimbulva.berlinchess.service.engine.ChessEngine
-import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardItem
+import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardPieceItem
 import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         positionsDisposable = chessEngine.boardObservable
             .subscribe { board ->
                 chessboard.setItems(
-                    board.pieces.map { ChessboardItem(it.player, it.pieceType, it.square) }
+                    board.pieces.map { ChessboardPieceItem(it.player, it.pieceType, it.square) }
                 )
             }
     }
