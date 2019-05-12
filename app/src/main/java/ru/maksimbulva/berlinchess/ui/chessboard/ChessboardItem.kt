@@ -4,12 +4,9 @@ import ru.maksimbulva.berlinchess.model.chess.PieceType
 import ru.maksimbulva.berlinchess.model.chess.Player
 import ru.maksimbulva.berlinchess.model.chess.Square
 
-sealed class ChessboardItem
-
-object ChessboardEmptyItem : ChessboardItem()
-
-data class ChessboardPieceItem(
-    val player: Player,
-    val pieceType: PieceType,
-    val square: Square
-) : ChessboardItem()
+class ChessboardItem(
+    val square: Square,
+    val player: Player?,
+    val pieceType: PieceType?,
+    val isHighlighted: Boolean
+)

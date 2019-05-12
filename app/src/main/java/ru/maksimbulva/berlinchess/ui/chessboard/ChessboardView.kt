@@ -15,6 +15,8 @@ class ChessboardView @JvmOverloads constructor(
     private val grid: GridView
     private val adapter = ChessboardAdapter(context)
 
+    val clicks get() = adapter.clicks
+
     init {
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.chessboard, this, true)
@@ -30,7 +32,7 @@ class ChessboardView @JvmOverloads constructor(
         setMeasuredDimension(minSize, minSize)
     }
 
-    fun setItems(items: Collection<ChessboardPieceItem>) {
+    fun setItems(items: Collection<ChessboardItem>) {
         adapter.setItems(items)
         grid.invalidateViews()
     }
