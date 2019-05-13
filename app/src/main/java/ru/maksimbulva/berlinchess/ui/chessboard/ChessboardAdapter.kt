@@ -52,7 +52,7 @@ class ChessboardAdapter(private val context: Context) : BaseAdapter() {
             view.setItem(items[position])
         }
 
-        view.setOnClickListener { clicksSubject.onNext(view.item) }
+        view.setOnClickListener { view.item?.let(clicksSubject::onNext) }
 
         return view
     }

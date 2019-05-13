@@ -4,11 +4,14 @@ import chess.Move
 import chess.Position
 import guibase.GUIInterface
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class EngineListener : GUIInterface {
 
     private val positionSubject = BehaviorSubject.create<Position>()
+    private var d: Disposable? = null
 
     val positionObservable: Observable<Position> get() = positionSubject
 
@@ -40,7 +43,7 @@ class EngineListener : GUIInterface {
 
     /** Get "random move" setting.  */
     override fun randomMode(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return true
     }
 
     /** Return true if "show thinking" is enabled.  */
@@ -54,12 +57,7 @@ class EngineListener : GUIInterface {
 
     /** Run code on the GUI thread.  */
     override fun runOnUIThread(runnable: Runnable?) {
-        if (runnable != null) {
-//            Single.just(runnable)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({})
-        }
-        TODO()
+        runnable?.let { AndroidSchedulers.mainThread().scheduleDirect(it) }
     }
 
     /** Report that user attempted to make an invalid move.  */

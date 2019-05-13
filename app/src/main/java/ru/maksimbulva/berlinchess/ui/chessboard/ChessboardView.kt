@@ -34,6 +34,5 @@ class ChessboardView @JvmOverloads constructor(
 
     fun setItems(items: Collection<ChessboardItem>) {
         adapter.setItems(items)
-        grid.invalidateViews()
     }
 }

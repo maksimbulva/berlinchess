@@ -1,5 +1,7 @@
 package ru.maksimbulva.berlinchess.service.engine
 
+import chess.Move
+import chess.Piece
 import guibase.ChessController
 import io.reactivex.Observable
 import ru.maksimbulva.berlinchess.model.chess.Board
@@ -26,5 +28,9 @@ class ChessEngine {
     init {
         controller.newGame(true, 16, false)
         controller.startGame()
+    }
+
+    fun playMove(moveFrom: Square, moveTo: Square) {
+        controller.humanMove(Move(moveFrom.index, moveTo.index, Piece.EMPTY))
     }
 }

@@ -18,14 +18,20 @@ class ChessboardSquareView @JvmOverloads constructor(
 ) : FrameLayout(context, attributeSet) {
 
     private val backgroundImage: ImageView
+    private val selectionImage: ImageView
     private val pieceImage: ImageView
-    @DrawableRes private val pieceResId: Int? = null
+    @DrawableRes
+    private var pieceResId: Int? = null
+
+    private var item_: ChessboardItem? = null
+    val item: ChessboardItem? get() = item_
 
     init {
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.chessboard_square, this, true)
 
         backgroundImage = findViewById(R.id.background)
+        selectionImage = findViewById(R.id.selection)
         pieceImage = findViewById(R.id.piece)
     }
 
@@ -38,10 +44,15 @@ class ChessboardSquareView @JvmOverloads constructor(
     }
 
     fun setItem(item: ChessboardItem) {
+        this.item_ = item
+
+        selectionImage.visibility = if (item.isHighlighted) View.VISIBLE else View.GONE
+
         @DrawableRes val pieceResId = getPieceResId(item)
         if (pieceResId == this.pieceResId) {
             return
         }
+        this.pieceResId = pieceResId
 
         if (pieceResId != null) {
             pieceImage.setImageResource(pieceResId)
