@@ -3,17 +3,16 @@ package ru.maksimbulva.berlinchess.service.engine
 import chess.Move
 import chess.Position
 import guibase.GUIInterface
-import io.reactivex.Observable
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class EngineListener : GUIInterface {
 
     private val positionSubject = BehaviorSubject.create<Position>()
-    private var d: Disposable? = null
 
-    val positionObservable: Observable<Position> get() = positionSubject
+    val positionFlowable: Flowable<Position> get() = positionSubject.toFlowable(BackpressureStrategy.LATEST)
 
     /** Update the displayed board position.  */
     override fun setPosition(pos: Position?) {

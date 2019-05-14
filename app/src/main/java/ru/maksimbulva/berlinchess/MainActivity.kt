@@ -11,26 +11,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.BehaviorSubject
-import ru.maksimbulva.berlinchess.model.chess.Board
-import ru.maksimbulva.berlinchess.model.chess.Player
-import ru.maksimbulva.berlinchess.model.chess.Square
-import ru.maksimbulva.berlinchess.service.engine.ChessEngine
-import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardItem
-import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardView
+import ru.maksimbulva.berlinchess.gameroom.GameRoomFragment
+import ru.maksimbulva.berlinchess.gameroom.GameRoomPresenter
+import ru.maksimbulva.berlinchess.util.replaceFragmentInActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-    private val boards: BehaviorSubject<Board?> = BehaviorSubject.create()
-    private val selectedSquares: BehaviorSubject<Set<Int>> = BehaviorSubject.create()
-
-    var positionsDisposable: Disposable? = null
-    var selectedSquaresDisposable: Disposable? = null
-    var boardUpdater: Disposable? = null
-    var humanMoveDisposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,49 +38,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         navView.setNavigationItemSelectedListener(this)
 
-        val chessboard: ChessboardView = findViewById(R.id.chessboard)
-
-        val chessEngine = ChessEngine()
-        positionsDisposable = chessEngine.boardObservable
-            .subscribe { boards.onNext(it) }
-
-        selectedSquaresDisposable = chessboard.clicks
-            .subscribe { item ->
-                val currentSelection: Set<Int> = selectedSquares.value ?: emptySet()
-                selectedSquares.onNext(currentSelection + item.square.index)
+        val gameRoomFragment = supportFragmentManager.findFragmentById(R.id.content_frame) as GameRoomFragment?
+            ?: GameRoomFragment().also {
+                replaceFragmentInActivity(it, R.id.content_frame)
             }
 
-        selectedSquares.onNext(emptySet())
-
-        boardUpdater = Observable.combineLatest<Board?, Set<Int>, Pair<Board?, Set<Int>>>(
-            boards,
-            selectedSquares,
-            BiFunction { board, selection -> board to selection }
-        )
-            .subscribe { (board, selection) ->
-                chessboard.setItems(
-                    board?.squares?.mapIndexed { index, pieceOnBoard ->
-                        ChessboardItem(
-                            square = Square(index),
-                            player = pieceOnBoard?.player,
-                            pieceType = pieceOnBoard?.pieceType,
-                            isHighlighted = (index in selection)
-                        )
-                    } ?: emptyList()
-                )
-            }
-
-        humanMoveDisposable = selectedSquares
-            .filter { it.size == 2 }
-            .subscribe { selection ->
-                val board = boards.value ?: return@subscribe
-                val moveFrom = selection.find { board.squares[it]?.player == Player.White }
-                val moveTo = selection.find { it != moveFrom }
-                if (moveFrom != null && moveTo != null) {
-                    chessEngine.playMove(Square(moveFrom), Square(moveTo))
-                }
-                selectedSquares.onNext(emptySet())
-            }
+        val presenter = GameRoomPresenter(gameRoomFragment)
     }
 
     override fun onBackPressed() {

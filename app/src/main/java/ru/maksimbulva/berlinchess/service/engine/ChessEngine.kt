@@ -3,7 +3,7 @@ package ru.maksimbulva.berlinchess.service.engine
 import chess.Move
 import chess.Piece
 import guibase.ChessController
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import ru.maksimbulva.berlinchess.model.chess.Board
 import ru.maksimbulva.berlinchess.model.chess.PieceOnBoard
 import ru.maksimbulva.berlinchess.model.chess.Square
@@ -14,8 +14,8 @@ class ChessEngine {
     private val listener = EngineListener()
     private val controller = ChessController(listener)
 
-    val boardObservable: Observable<Board>
-        get() = listener.positionObservable
+    val boardFlowable: Flowable<Board>
+        get() = listener.positionFlowable
             .map { position ->
                 val pieces = position.squares.asSequence()
                     .mapIndexedNotNull { index, pieceOnSquare ->
