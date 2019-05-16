@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.core.util.containsKey
-import io.reactivex.Observable
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import ru.maksimbulva.berlinchess.model.chess.Square
 import ru.maksimbulva.berlinchess.model.chess.SquareColor
@@ -17,7 +18,7 @@ class ChessboardAdapter(private val context: Context) : BaseAdapter() {
     private val views = SparseArray<ChessboardSquareView>()
 
     private val clicksSubject = BehaviorSubject.create<ChessboardItem>()
-    val clicks: Observable<ChessboardItem> = clicksSubject
+    val clicks: Flowable<ChessboardItem> = clicksSubject.toFlowable(BackpressureStrategy.LATEST)
 
     override fun getCount() = SQUARE_COUNT
 

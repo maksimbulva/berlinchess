@@ -12,7 +12,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import ru.maksimbulva.berlinchess.gameroom.GameRoomFragment
-import ru.maksimbulva.berlinchess.gameroom.GameRoomPresenter
 import ru.maksimbulva.berlinchess.util.replaceFragmentInActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -38,12 +37,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         navView.setNavigationItemSelectedListener(this)
 
-        val gameRoomFragment = supportFragmentManager.findFragmentById(R.id.content_frame) as GameRoomFragment?
+        supportFragmentManager.findFragmentById(R.id.content_frame) as GameRoomFragment?
             ?: GameRoomFragment().also {
                 replaceFragmentInActivity(it, R.id.content_frame)
             }
-
-        val presenter = GameRoomPresenter(gameRoomFragment)
     }
 
     override fun onBackPressed() {
