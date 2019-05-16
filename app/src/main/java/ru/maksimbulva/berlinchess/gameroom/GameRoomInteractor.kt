@@ -17,7 +17,7 @@ class GameRoomInteractor {
     private val boardDisposable = chessEngine.boardFlowable
         .subscribe(boardSubject::onNext)
 
-    val currentBoard: Board? = boardSubject.value
+    val currentBoard: Board? get() = boardSubject.value
 
     fun playMove(moveFrom: Square, moveTo: Square) {
         chessEngine.playMove(moveFrom, moveTo)
