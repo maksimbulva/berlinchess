@@ -8,4 +8,6 @@ class Board(val pieces: Collection<PieceOnBoard>) {
             squares[it.square.index] = it
         }
     }
+
+    fun at(square: Square): PieceOnBoard? = squares[square.index]
 }

@@ -9,6 +9,8 @@ import ru.maksimbulva.berlinchess.model.chess.PieceOnBoard
 import ru.maksimbulva.berlinchess.model.chess.Square
 import ru.maksimbulva.berlinchess.service.engine.adapter.PieceTypeAdapter
 
+typealias MyMove = ru.maksimbulva.berlinchess.model.chess.Move
+
 class ChessEngine {
 
     private val listener = EngineListener()
@@ -30,7 +32,7 @@ class ChessEngine {
         controller.startGame()
     }
 
-    fun playMove(moveFrom: Square, moveTo: Square) {
-        controller.humanMove(Move(moveFrom.index, moveTo.index, Piece.EMPTY))
+    fun playMove(move: MyMove) {
+        controller.humanMove(Move(move.squareFrom.index, move.squareTo.index, Piece.EMPTY))
     }
 }

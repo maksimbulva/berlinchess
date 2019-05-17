@@ -4,6 +4,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import ru.maksimbulva.berlinchess.model.chess.Board
+import ru.maksimbulva.berlinchess.model.chess.Move
 import ru.maksimbulva.berlinchess.model.chess.Square
 import ru.maksimbulva.berlinchess.service.engine.ChessEngine
 
@@ -19,7 +20,7 @@ class GameRoomInteractor {
 
     val currentBoard: Board? get() = boardSubject.value
 
-    fun playMove(moveFrom: Square, moveTo: Square) {
-        chessEngine.playMove(moveFrom, moveTo)
+    fun playMove(move: Move) {
+        chessEngine.playMove(move)
     }
 }
