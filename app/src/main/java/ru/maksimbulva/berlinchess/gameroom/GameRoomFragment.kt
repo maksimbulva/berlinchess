@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.rxkotlin.subscribeBy
@@ -16,6 +17,7 @@ import java.lang.Exception
 class GameRoomFragment : RxFragment() {
 
     private lateinit var chessboard: ChessboardView
+    private lateinit var thinkingText: TextView
 
     private lateinit var model: GameRoomViewModel
 
@@ -28,6 +30,10 @@ class GameRoomFragment : RxFragment() {
         model.chessboardItems.observe(this, Observer<Collection<ChessboardItem>> { items ->
             setChessboardItems(items)
         })
+
+        model.thinkingTextFlowable.observe(this, Observer<String> { text ->
+            thinkingText.text = text
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,6 +43,8 @@ class GameRoomFragment : RxFragment() {
         addSubscription(
             chessboard.clicks.subscribeBy(onNext = model::addUserSelectedItem)
         )
+
+        thinkingText = root.findViewById(R.id.thinking_text)
 
         return root
     }

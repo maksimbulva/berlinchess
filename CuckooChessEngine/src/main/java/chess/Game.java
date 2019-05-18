@@ -42,6 +42,10 @@ public class Game {
         handleCommand("new");
     }
 
+    public final List<Move> getMoveList() {
+        return moveList;
+    }
+
     /**
      * Update the game state according to move/command string from a player.
      * @param str The move or command to process.

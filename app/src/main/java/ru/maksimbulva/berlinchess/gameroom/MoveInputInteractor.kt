@@ -12,20 +12,20 @@ class MoveInputInteractor {
 
     private val selectionSubject: BehaviorSubject<List<Square>> = BehaviorSubject.create()
 
-    val selectionFlowable: Flowable<List<Square>> = selectionSubject.toFlowable(BackpressureStrategy.LATEST)
+    val selectionFlowable: Flowable<List<Square>> get() = selectionSubject.toFlowable(BackpressureStrategy.LATEST)
 
     private val selection: List<Square> get() = selectionSubject.value ?: emptyList()
 
     private val moveSubject: BehaviorSubject<Move> = BehaviorSubject.create()
 
-    val moveFlowable: Flowable<Move> = moveSubject.toFlowable(BackpressureStrategy.LATEST)
+    val moveFlowable: Flowable<Move> get() = moveSubject.toFlowable(BackpressureStrategy.LATEST)
 
     init {
         selectionSubject.onNext(emptyList())
     }
 
     fun onSquareSelected(selectedSquare: Square, board: Board) {
-        val pieceOnBoard = board.squares[selectedSquare.index]
+        val pieceOnBoard = board.at(selectedSquare)
         if (selection.size == 1) {
             val squareFrom = selection.first()
             // TODO: check if move is valid
