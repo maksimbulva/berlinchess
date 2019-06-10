@@ -4,6 +4,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import ru.maksimbulva.berlinchess.model.chess.Move
+import ru.maksimbulva.berlinchess.model.chess.PieceType
 import ru.maksimbulva.berlinchess.model.chess.Position
 import ru.maksimbulva.berlinchess.service.engine.ChessEngine
 
@@ -19,9 +20,15 @@ class GameRoomInteractor {
 
     val currentPosition: Position? get() = positionSubject.value
 
-    val thinkingTextFlowable: Flowable<String> get() = chessEngine.thinkingTextFlowable
+    val piecePromotionRequestFlowable = chessEngine.piecePromotionRequestFlowable
 
     fun playMove(move: Move) {
         chessEngine.playMove(move)
+    }
+
+    fun onPromotionPieceSelected(pieceType: PieceType) {
+        if (pieceType != PieceType.Pawn && pieceType != PieceType.King) {
+            chessEngine.onPromotionPieceSelected(pieceType)
+        }
     }
 }

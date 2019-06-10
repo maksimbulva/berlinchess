@@ -4,15 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ru.maksimbulva.berlinchess.ui.chessboard.ChessboardView
-        android:id="@+id/chessboard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/thinking_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        <ru.maksimbulva.berlinchess.ui.chessboard.ChessboardView
+            android:id="@+id/chessboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ru.maksimbulva.berlinchess.ui.promotion.PiecePromotionView
+            android:id="@+id/piece_promotion_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </LinearLayout>

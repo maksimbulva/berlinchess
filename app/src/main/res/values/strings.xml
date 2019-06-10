@@ -13,4 +13,9 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+
+    <string name="promote_to_knight">Promote to a Knight</string>
+    <string name="promote_to_bishop">Promote to a Bishop</string>
+    <string name="promote_to_rook">Promote to a Rook</string>
+    <string name="promote_to_queen">Promote to a Queen</string>
 </resources>

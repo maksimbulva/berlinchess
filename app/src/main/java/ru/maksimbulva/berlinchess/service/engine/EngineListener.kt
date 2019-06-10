@@ -11,13 +11,14 @@ import ru.maksimbulva.berlinchess.service.engine.adapter.PositionAdapter
 
 class EngineListener : GUIInterface {
 
-    private val positionSubject: BehaviorSubject<Position> = BehaviorSubject.create<Position>()
+    private val positionSubject: BehaviorSubject<Position> = BehaviorSubject.create()
 
     val positionFlowable: Flowable<Position> get() = positionSubject.toFlowable(BackpressureStrategy.LATEST)
 
-    private val thinkingTextSubject: BehaviorSubject<String> = BehaviorSubject.create<String>()
+    private val piecePromotionRequestSubject: BehaviorSubject<Unit> = BehaviorSubject.create()
 
-    val thinkingTextFlowable: Flowable<String> get() = thinkingTextSubject.toFlowable(BackpressureStrategy.LATEST)
+    val piecePromotionRequestFlowable: Flowable<Unit>
+        get() = piecePromotionRequestSubject.toFlowable(BackpressureStrategy.LATEST)
 
     /** Update the displayed board position.  */
     override fun setPosition(pos: chess.Position?) {
@@ -40,8 +41,7 @@ class EngineListener : GUIInterface {
 
     /** Update the computer thinking information.  */
     override fun setThinkingString(str: String?) {
-        android.util.Log.e("BerlinChess", str ?: "")
-        thinkingTextSubject.onNext(str ?: "")
+        // no op
     }
 
     /** Get the current time limit.  */
@@ -51,7 +51,7 @@ class EngineListener : GUIInterface {
 
     /** Get "random move" setting.  */
     override fun randomMode(): Boolean {
-        return false
+        return true
     }
 
     /** Return true if "show thinking" is enabled.  */
@@ -61,6 +61,7 @@ class EngineListener : GUIInterface {
 
     /** Ask what to promote a pawn to. Should call reportPromotePiece() when done.  */
     override fun requestPromotePiece() {
+        piecePromotionRequestSubject.onNext(Unit)
     }
 
     /** Run code on the GUI thread.  */

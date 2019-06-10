@@ -15,7 +15,7 @@ class ChessboardView @JvmOverloads constructor(
     private val grid: GridView
     private val adapter = ChessboardAdapter(context)
 
-    val clicks get() = adapter.clicks
+    val clicks get() = adapter.clicks.filter { isEnabled }
 
     init {
         val inflater = LayoutInflater.from(context)

@@ -26,4 +26,16 @@ object PieceTypeAdapter {
             else -> throw IllegalArgumentException("Unexpected piece code $encoded")
         }
     }
+
+    fun toEngine(pieceType: PieceType, player: Player): Int {
+        val isWhite = player == Player.White
+        return when (pieceType) {
+            PieceType.Pawn -> if (isWhite) Piece.WPAWN else Piece.BPAWN
+            PieceType.Knight -> if (isWhite) Piece.WKNIGHT else Piece.BKNIGHT
+            PieceType.Bishop -> if (isWhite) Piece.WBISHOP else Piece.BBISHOP
+            PieceType.Rook -> if (isWhite) Piece.WROOK else Piece.BROOK
+            PieceType.Queen -> if (isWhite) Piece.WQUEEN else Piece.BQUEEN
+            PieceType.King -> if (isWhite) Piece.WKING else Piece.BKING
+        }
+    }
 }

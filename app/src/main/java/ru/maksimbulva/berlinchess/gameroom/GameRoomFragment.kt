@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.rxkotlin.subscribeBy
@@ -12,12 +11,12 @@ import ru.maksimbulva.berlinchess.R
 import ru.maksimbulva.berlinchess.mvvm.RxFragment
 import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardItem
 import ru.maksimbulva.berlinchess.ui.chessboard.ChessboardView
-import java.lang.Exception
+import ru.maksimbulva.berlinchess.ui.promotion.PiecePromotionView
 
 class GameRoomFragment : RxFragment() {
 
     private lateinit var chessboard: ChessboardView
-    private lateinit var thinkingText: TextView
+    private lateinit var piecePromotionSelector: PiecePromotionView
 
     private lateinit var model: GameRoomViewModel
 
@@ -31,8 +30,9 @@ class GameRoomFragment : RxFragment() {
             setChessboardItems(items)
         })
 
-        model.thinkingTextFlowable.observe(this, Observer<String> { text ->
-            thinkingText.text = text
+        model.piecePromotionRequest.observe(this, Observer {
+            chessboard.isEnabled = false
+            piecePromotionSelector.visibility = View.VISIBLE
         })
     }
 
@@ -44,7 +44,16 @@ class GameRoomFragment : RxFragment() {
             chessboard.clicks.subscribeBy(onNext = model::addUserSelectedItem)
         )
 
-        thinkingText = root.findViewById(R.id.thinking_text)
+        piecePromotionSelector = root.findViewById(R.id.piece_promotion_selector)
+        addSubscription(
+            piecePromotionSelector.pieceSelectedFlowable.subscribeBy(
+                onNext = { pieceType ->
+                    chessboard.isEnabled = true
+                    piecePromotionSelector.visibility = View.GONE
+                    model.onPromotionPieceSelected(pieceType)
+                }
+            )
+        )
 
         return root
     }

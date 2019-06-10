@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
-import ru.maksimbulva.berlinchess.model.chess.Board
+import ru.maksimbulva.berlinchess.model.chess.PieceType
 import ru.maksimbulva.berlinchess.model.chess.Position
 import ru.maksimbulva.berlinchess.model.chess.Square
 import ru.maksimbulva.berlinchess.mvvm.RxViewModel
@@ -21,9 +21,9 @@ class GameRoomViewModel : RxViewModel() {
 
     val chessboardItems: LiveData<Collection<ChessboardItem>> = _chessboardItems
 
-    private val _thinkingTextFlowable = MutableLiveData<String>()
+    private val _piecePromotionRequest = MutableLiveData<Unit>()
 
-    val thinkingTextFlowable: LiveData<String> = _thinkingTextFlowable
+    val piecePromotionRequest: LiveData<Unit> = _piecePromotionRequest
 
     init {
         addSubscription(
@@ -52,10 +52,21 @@ class GameRoomViewModel : RxViewModel() {
                     onNext = { move -> interactor.playMove(move) }
                 )
         )
+
+        addSubscription(
+            interactor.piecePromotionRequestFlowable
+                .subscribeBy(
+                    onNext = { _piecePromotionRequest.value = Unit }
+                )
+        )
     }
 
     fun addUserSelectedItem(item: ChessboardItem) {
         val board = interactor.currentPosition?.board ?: return
         moveInputInteractor.onSquareSelected(item.square, board)
+    }
+
+    fun onPromotionPieceSelected(pieceType: PieceType) {
+        interactor.onPromotionPieceSelected(pieceType)
     }
 }
